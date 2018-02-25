@@ -1,16 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { 
+  StyleSheet,
+  Text,
+  View,
+  FlatList, 
+  Dimensions,
+  TouchableWithoutFeedback } from 'react-native';
+import { MainListItem } from './MainListItem/MainListItem';
 
-export const Main = () => (
-  <View style={styles.main}>
-    <Text>In main component!</Text>
+const { height, width } = Dimensions.get('window');
+
+export const Main = (props) => (
+  <View>
+    <FlatList
+      data={props.financetypes}
+      renderItem={({item}) => 
+        <MainListItem item={item} />
+      }
+    />
   </View>
 );
-
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});
