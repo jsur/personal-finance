@@ -10,7 +10,7 @@ import { MainListItem } from './MainListItem/MainListItem';
 
 const { height, width } = Dimensions.get('window');
 
-export const Main = (props) => (
+export const MainList = (props) => (
   <View>
     <FlatList
       data={props.financetypes}

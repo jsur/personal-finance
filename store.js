@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { mainReducer } from './components/Main/MainListReducer';
+import { mainListReducer } from './components/MainList/MainListReducer';
 
 function testReducer(state = 'test', action) {
   return state;
@@ -7,7 +7,7 @@ function testReducer(state = 'test', action) {
 
 const reducer = combineReducers({
   test: testReducer,
-  financetypes: mainReducer
+  financetypes: mainListReducer
 });
 
 const store = createStore(reducer);

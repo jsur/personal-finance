@@ -5,9 +5,12 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   StyleSheet } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 export const MainListItem = (props) => (
-  <TouchableWithoutFeedback>
+  <TouchableWithoutFeedback
+    onPress={Actions[props.item.key]}
+  >
     <View style={styles.listItem}>
       <Text>{props.item.key}</Text>
     </View>
@@ -24,4 +27,3 @@ const styles = StyleSheet.create({
     borderStyle: 'solid'
   }
 });
-

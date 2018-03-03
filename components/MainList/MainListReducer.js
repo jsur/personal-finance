@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import { Main } from './Main';
+import { MainList } from './MainList';
 
-export function mainReducer(state = [
+export function mainListReducer(state = [
   {
     key: 'savings',
     sum: 1100
   },
   {
-    key: 'crypto',
+    key: 'cryptos',
     sum: 14500
   },
   {
@@ -57,4 +57,4 @@ const mapDispatchToMainProps = (dispatch) => (
 export const MainContainer = connect(
   mapStateToMainProps,
   mapDispatchToMainProps
-)(Main);
+)(MainList);
