@@ -6,6 +6,7 @@
         "react-native/react-native": true
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
@@ -15,7 +16,8 @@
     },
     "plugins": [
         "react",
-        "react-native"
+        "react-native",
+        "babel"
     ],
     "rules": {
         "indent": [
@@ -34,6 +36,9 @@
             "error",
             "always"
         ],
-        "react/jsx-uses-vars": 2
+        "react/jsx-uses-vars": 2,
+        "babel/new-cap": 1,
+        "babel/no-invalid-this": 1,
+        "babel/semi": 1
     }
 }
