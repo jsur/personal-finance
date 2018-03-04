@@ -5,10 +5,10 @@ import {
   View,
   TouchableWithoutFeedback } from 'react-native';
 
-const Savings = (props) => (
+const Stocks = () => (
   <View>
-    <Text>At savings!</Text>
+    <Text>At stocks!</Text>
   </View>
 );
 
-export default Savings;
+export default Stocks;

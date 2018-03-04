@@ -5,8 +5,10 @@ import {
   View,
   TouchableWithoutFeedback } from 'react-native';
 
-export const Cryptos = (props) => (
+const Cryptos = (props) => (
   <View>
     <Text>At crypto!</Text>
   </View>
 );
+
+export default Cryptos;

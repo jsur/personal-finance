@@ -13,28 +13,12 @@ export function mainListReducer(state = [
   {
     key: 'stocks',
     sum: 9100
-  },
-  {
-    key: 'testi',
-    sum: 9100
-  },
-  {
-    key: 'pekka',
-    sum: 9100
-  },
-  {
-    key: 'seppohovi',
-    sum: 9100
-  },
-  {
-    key: 'rami',
-    sum: 9100
   }
 ], action) {
-  switch(action.type) {
-    default: {
-      return state;
-    }
+  switch (action.type) {
+  default: {
+    return state;
+  }
   }
 }
 
