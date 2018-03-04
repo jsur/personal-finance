@@ -1,11 +1,7 @@
 import React from 'react';
-import { 
-  StyleSheet,
-  Text,
-  View,
-  TouchableWithoutFeedback } from 'react-native';
+import { Text, View } from 'react-native';
 
-const Savings = (props) => (
+const Savings = () => (
   <View>
     <Text>At savings!</Text>
   </View>

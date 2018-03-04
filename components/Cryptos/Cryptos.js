@@ -1,11 +1,7 @@
 import React from 'react';
-import { 
-  StyleSheet,
-  Text,
-  View,
-  TouchableWithoutFeedback } from 'react-native';
+import { Text, View } from 'react-native';
 
-const Cryptos = (props) => (
+const Cryptos = () => (
   <View>
     <Text>At crypto!</Text>
   </View>

@@ -1,9 +1,5 @@
 import React from 'react';
-import { 
-  StyleSheet,
-  Text,
-  View,
-  TouchableWithoutFeedback } from 'react-native';
+import { Text, View } from 'react-native';
 
 const Stocks = () => (
   <View>
