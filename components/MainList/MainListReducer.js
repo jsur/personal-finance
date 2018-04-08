@@ -13,9 +13,6 @@ export function mainListReducer(state = [
   {
     key: 'stocks',
     sum: 9100
-  },
-  {
-    key: 'login'
   }
 ], action) {
   switch (action.type) {

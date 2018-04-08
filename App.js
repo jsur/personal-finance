@@ -4,7 +4,7 @@ import { StyleSheet, Platform, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { MainContainer } from './components/MainList/MainListReducer';
-import { Router, Stack, Scene } from 'react-native-router-flux';
+import { Actions, Router, Stack, Scene } from 'react-native-router-flux';
 import Savings from './components/Savings/Savings';
 import Cryptos from './components/Cryptos/Cryptos';
 import Stocks from './components/Stocks/Stocks';
@@ -12,7 +12,12 @@ import Login from './components/Login/Login';
 
 export default class App extends React.Component {
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    let user = '';
+  }
+
+  async componentWillMount() {
     const firebaseConfig = {
       apiKey: 'AIzaSyBDfOgSsKfFZHQDlDvlKbiLMCENwjqz3jU',
       authDomain: 'personal-finance123.firebaseapp.com',
@@ -22,6 +27,8 @@ export default class App extends React.Component {
       messagingSenderId: '872553161990'
     };
     firebase.initializeApp(firebaseConfig);
+    
+    this.user = await firebase.auth().currentUser;
   }
 
   render() {
@@ -29,11 +36,11 @@ export default class App extends React.Component {
       <Provider store={store}>
         <Router sceneStyle={styles.header} >
           <Stack key='root'>
+            <Scene key='login' component={Login} title='Login' />
             <Scene key='mainList' component={MainContainer} title='My list' />
             <Scene key='savings' component={Savings} />
             <Scene key='cryptos' component={Cryptos} />
             <Scene key='stocks' component={Stocks} />
-            <Scene key='login' component={Login} />
           </Stack>
         </Router>
       </Provider>
