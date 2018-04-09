@@ -4,7 +4,7 @@ import { StyleSheet, Platform, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { MainContainer } from './components/MainList/MainListReducer';
-import { Actions, Router, Stack, Scene } from 'react-native-router-flux';
+import { Router, Stack, Scene } from 'react-native-router-flux';
 import Savings from './components/Savings/Savings';
 import Cryptos from './components/Cryptos/Cryptos';
 import Stocks from './components/Stocks/Stocks';
@@ -14,7 +14,6 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    let user = '';
   }
 
   async componentWillMount() {
@@ -27,8 +26,6 @@ export default class App extends React.Component {
       messagingSenderId: '872553161990'
     };
     firebase.initializeApp(firebaseConfig);
-    
-    this.user = await firebase.auth().currentUser;
   }
 
   render() {

@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import { Alert, Button, Text, View, TextInput } from 'react-native';
+import { Button, Text, View, TextInput, StyleSheet } from 'react-native';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
+import { height, width } from '../../styles/common';
 
 class Login extends Component {
 
   constructor(props) {
     super(props);
-    let user = '';
+    this.user = '';
   }
 
   state = {
     email: '',
     password: '',
-    error: '',
     loading: false
   };
 
@@ -21,9 +21,7 @@ class Login extends Component {
     // firebase auth onAuthStateChanged????
     // https://stackoverflow.com/questions/46011436/what-and-how-to-store-to-keep-users-logged-in-in-a-react-native-app-with-firebas?rq=1
     this.user = await firebase.auth().currentUser;
-    console.log(this.user);
     if (this.user !== null) {
-      console.log(this.user);
       Actions.popAndPush('mainList');
     }
   }
@@ -48,22 +46,39 @@ class Login extends Component {
 
   logout = async () => {
     await firebase.auth().signOut();
-  }
+    this.setState({
+      email: '',
+      password: ''
+    });
+  };
+
+  validateLogin = (email, password) => {
+    if (!email.includes('@') || email.length === 0) {
+      return true;
+    }
+    if (password.length < 6) {
+      return true;
+    }
+    return false;
+  };
 
   render() {
+
+    const loginDisabled = this.validateLogin(this.state.email, this.state.password);
+
     return (
-      <View>
-        <Text>Email</Text>
+      <View style={styles.loginMain}>
+        <Text style={styles.inputText} >Email</Text>
         <TextInput
+          style={styles.input}
           autoCorrect={false}
-          placeholder={'Email'}
           value={this.state.email}
           onChangeText={email => this.setState({ email })}
         />
-        <Text>Password</Text>
+        <Text style={styles.inputText} >Password</Text>
         <TextInput
+          style={styles.input}
           autoCorrect={false}
-          placeholder={'Password'}
           secureTextEntry={true}
           value={this.state.password}
           onChangeText={password => this.setState({ password })}
@@ -71,6 +86,7 @@ class Login extends Component {
         <Button 
           title='Log in'
           onPress={this.login}
+          disabled={loginDisabled}
         />
         <Button 
           title='Logout'
@@ -81,5 +97,20 @@ class Login extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  loginMain: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: height * 0.15
+  },
+  input: {
+    marginBottom: 25,
+    width: width * 0.8
+  },
+  inputText: {
+    marginBottom: 10
+  }
+});
 
 export default Login;
