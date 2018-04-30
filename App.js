@@ -11,12 +11,9 @@ import Stocks from './components/Stocks/Stocks';
 import Login from './components/Login/Login';
 import MainListMenuButton from './components/MainList/MainListMenuButton/MainListMenuButton';
 import MainMenu from './components/MainMenu/MainMenu';
+import { logError } from './services/firebaseLogger';
 
 export default class App extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   async componentWillMount() {
     const firebaseConfig = {
@@ -33,6 +30,11 @@ export default class App extends React.Component {
         Actions.reset('mainList');
       }
     });
+  }
+
+  componentDidCatch(error, info) {
+    logError(error, info);
+    alert('Something bad happened!');
   }
 
   render() {

@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
-  Dimensions,
   StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 

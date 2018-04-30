@@ -45,7 +45,7 @@ class Login extends Component {
   };
 
   render() {
-
+    
     const loginDisabled = this.validateLogin(this.state.email, this.state.password);
 
     return (
