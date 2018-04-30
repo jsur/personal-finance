@@ -8,7 +8,6 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.user = '';
   }
 
   state = {
@@ -16,15 +15,6 @@ class Login extends Component {
     password: '',
     loading: false
   };
-
-  async componentWillMount() {
-    // firebase auth onAuthStateChanged????
-    // https://stackoverflow.com/questions/46011436/what-and-how-to-store-to-keep-users-logged-in-in-a-react-native-app-with-firebas?rq=1
-    this.user = await firebase.auth().currentUser;
-    if (this.user !== null) {
-      Actions.popAndPush('mainList');
-    }
-  }
 
   login = () => {
     this.setState({ loading: true });
@@ -42,14 +32,6 @@ class Login extends Component {
             alert(err);
           });
       });
-  };
-
-  logout = async () => {
-    await firebase.auth().signOut();
-    this.setState({
-      email: '',
-      password: ''
-    });
   };
 
   validateLogin = (email, password) => {
@@ -88,11 +70,6 @@ class Login extends Component {
           onPress={this.login}
           disabled={loginDisabled}
         />
-        <Button 
-          title='Logout'
-          onPress={this.logout}
-        >
-        </Button>
       </View>
     );
   }
