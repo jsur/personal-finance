@@ -11,7 +11,7 @@ import Stocks from './components/Stocks/Stocks';
 import Login from './components/Login/Login';
 import MainListMenuButton from './components/MainList/MainListMenuButton/MainListMenuButton';
 import MainMenu from './components/MainMenu/MainMenu';
-import { logError } from './services/firebaseLogger';
+import { logError } from './services/firebase-logger.service';
 
 export default class App extends React.Component {
 
