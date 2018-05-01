@@ -9,8 +9,9 @@ import Savings from './components/Savings/Savings';
 import Cryptos from './components/Cryptos/Cryptos';
 import Stocks from './components/Stocks/Stocks';
 import Login from './components/Login/Login';
-import MainListMenuButton from './components/MainList/MainListMenuButton/MainListMenuButton';
+import NavBarButton from './components/NavBarButton/NavBarButton';
 import MainMenu from './components/MainMenu/MainMenu';
+import AddStock from './components/Stocks/AddStock/AddStock';
 import { logError } from './services/firebase-logger.service';
 
 export default class App extends React.Component {
@@ -52,12 +53,17 @@ export default class App extends React.Component {
               key='mainList'
               component={MainContainer}
               title='My list'
-              renderLeftButton={MainListMenuButton}
+              renderLeftButton={NavBarButton({title: 'Menu', actionId: 'mainMenu'})}
             />
             <Scene key='savings' component={Savings} />
             <Scene key='cryptos' component={Cryptos} />
-            <Scene key='stocks' component={Stocks} />
+            <Scene 
+              key='stocks'
+              component={Stocks}
+              renderRightButton={NavBarButton({title: 'Add', actionId: 'addStock'})}
+            />
             <Scene key='mainMenu' component={MainMenu} />
+            <Scene key='addStock' component={AddStock} />
           </Stack>
         </Router>
       </Provider>

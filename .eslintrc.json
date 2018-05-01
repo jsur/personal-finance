@@ -37,7 +37,7 @@
             "always"
         ],
         "react/jsx-uses-vars": 2,
-        "babel/new-cap": 1,
+        "babel/new-cap": 0,
         "babel/no-invalid-this": 1,
         "babel/semi": 1
     }
