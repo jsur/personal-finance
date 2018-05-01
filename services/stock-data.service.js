@@ -11,9 +11,11 @@ const getQuotes = async (symbolsArr) => {
   let quotes;
   try {
     quotes = await Promise.all(quotePromises);
-  } catch (err) {
-    console.log('KARMIA VIRHE!!', err);
-    return new Error(err);
+  } catch (error) {
+    return {
+      status: 503,
+      error
+    };
   }
   const retArr = quotes.map((quote) => {
     if (quote.status === 200) {
@@ -22,17 +24,11 @@ const getQuotes = async (symbolsArr) => {
       const latestQuoteData = quoteData ? Object.keys(quoteData)[0] : undefined;
 
       return {
-        status: quote.status,
         symbol: quoteData ? quote.data['Meta Data']['2. Symbol'] : undefined,
         latestOpen: quoteData ? quoteData[latestQuoteData]['1. open'] : undefined,
-        latestClose: quoteData ? quoteData[latestQuoteData]['4. close'] : undefined ,
+        latestClose: quoteData ? quoteData[latestQuoteData]['4. close'] : undefined,
         latestHigh: quoteData ? quoteData[latestQuoteData]['2. high'] : undefined,
         latestLow: quoteData ? quoteData[latestQuoteData]['3. low'] : undefined
-      };
-    } else {
-      return {
-        status: quote.status,
-        statusText: quote.statusText
       };
     }
   });
