@@ -13,7 +13,7 @@ const firebaseConfig = {
 const baseurl = process.env.BASE_URL_ALPHA_VANTAGE;
 const interval = '1min';
 const apikey = process.env.API_KEY_ALPHA_VANTAGE;
-const symbols = require('./symbols').sp500symbols;
+const { symbols } = require('./symbols');
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -95,7 +95,7 @@ async function storeIntoFirebase(symbolArr) {
   console.log('firebase storage complete.');
   const stocksSnapShot = await db.ref('stocks').once('value');
   const stocksLength = Object.keys(stocksSnapShot.val()).length;
-  console.log(`updated ${stocksLength} stocks`);
+  console.log(`current stock count: ${stocksLength}`);
   setFirebaseDoneFlag(true);
 }
 
