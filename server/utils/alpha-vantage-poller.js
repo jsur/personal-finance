@@ -1,22 +1,12 @@
 const axios = require('axios');
-const firebase = require('firebase');
-const cron = require('cron');
+const Cron = require('cron');
 require('dotenv').config();
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_APIKEY,
-  authDomain: process.env.FIREBASE_AUTHDOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASEURL,
-  projectId: process.env.FIREBASE_PROJECTID,
-  storageBucket: process.env.FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID
-};
 const baseurl = process.env.BASE_URL_ALPHA_VANTAGE;
 const interval = '1min';
 const apikey = process.env.API_KEY_ALPHA_VANTAGE;
+const Stock = require('../models/Stock');
+const Config = require('../models/Config');
 const { symbols } = require('./symbols');
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -25,12 +15,12 @@ function sleep(ms) {
 async function getQuotes() {
   console.log('trying getQuotes'); 
   const quotePromises = [];
-  const canStoreSnapShot = await db.ref('config/latestStorage').once('value');
-  const canStore = canStoreSnapShot.val().done;
+  const config = await Config.findOne();
+  const canStore = config.stockSaveDone;
 
   if (canStore) {
     console.log('started getQuotes');
-    setFirebaseDoneFlag(false);
+    setCanStoreFlag(true);
 
     for (let i = 0; i < symbols.length; i++) {
       await sleep(1000);
@@ -41,6 +31,9 @@ async function getQuotes() {
         console.log(`error in axios.get: called url ${error.config ? error.config.url : ''}, response code and status: ${error.response ? error.response.status : ''} ${error.response ? error.response.statusText : ''}`);
       }
       quotePromises.push(promise);
+      if (quotePromises.length === symbols.length / 2) {
+        console.log('halfway there!');
+      }
     }
     console.log(`got ${quotePromises.length} promises for resolving`);
 
@@ -65,52 +58,54 @@ async function getQuotes() {
         };
       }
     });
-    storeIntoFirebase(symbolArr);
+    storeIntoDatabase(symbolArr);
   } else {
-    console.log(`canStore is ${canStore}, can't update data.`);
+    console.log(`can't start getQuotes, canStore is ${canStore}`);
   }
-
 }
 
-async function storeIntoFirebase(symbolArr) {
-  console.log('starting firebase storage');
+
+async function storeIntoDatabase(symbolArr) {
+  console.log('starting mongo storage');
 
   for (let i = 0; i <= symbolArr.length; i++) {
-    await sleep(750);
     const item = symbolArr[i];
     if (item && item.symbol) {
       item.symbol = item.symbol.replace('.', '-');
-      const timestamp = new Date();
-      const obj = {
-        timestamp: timestamp.toString(),
+      const stockEntry = {
+        symbol: item.symbol,
         latestOpen: item.latestOpen,
         latestClose: item.latestClose,
         latestHigh: item.latestHigh,
         latestLow: item.latestLow
       };
-      await db.ref(`stocks/${item.symbol}`).set(obj);
+      let stock;
+      try {
+        stock = await Stock.findOneAndUpdate({ symbol: item.symbol }, stockEntry, { upsert: true });
+      } catch (error) {
+        console.log('mongoose persisting failed!', error);
+      }
     }
   }
 
-  console.log('firebase storage complete.');
-  const stocksSnapShot = await db.ref('stocks').once('value');
-  const stocksLength = Object.keys(stocksSnapShot.val()).length;
-  console.log(`current stock count: ${stocksLength}`);
-  setFirebaseDoneFlag(true);
+  console.log('mongo storage complete.');
+  const allStocks = await Stock.find().count();
+  console.log(`stored ${allStocks} symbols with quotes`);
+  setCanStoreFlag(true);
 }
 
-const job = new cron.CronJob({
+async function setCanStoreFlag(bool) {
+  await Config.findOneAndUpdate(
+    { stockSaveDone: { $in: [true, false] }},
+    { stockSaveDone: bool },
+    { upsert: true }
+  );
+}
+
+const job = new Cron.CronJob({
   cronTime: '* * * * *',
   onTick: getQuotes
 });
-
-function setFirebaseDoneFlag(bool) {
-  const timestamp = new Date();
-  db.ref('config/latestStorage').set({
-    done: bool,
-    timestamp: timestamp.toString()
-  });
-}
 
 function cronJob() {
   console.log('cronJob started');
